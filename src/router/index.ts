@@ -35,6 +35,11 @@ const router = createRouter({
       path: '/today',
       name: 'TodayCard',
       component: TodayCard
+    },
+    {
+      path: '/backcover',
+      name: 'BackCover',
+      component: TodayCard
     }
   ]
 })
