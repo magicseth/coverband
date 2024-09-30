@@ -12,13 +12,13 @@ import { api } from '../../convex/_generated/api'
 import { useConvexAction, useConvexQuery } from '@convex-vue/core'
 import { useRoute } from 'vue-router'
 import type { Id } from 'convex/_generated/dataModel'
-import { onMounted } from 'vue'
+import { watch } from 'vue'
 
 const { id } = useRoute().params
 const { data: card } = useConvexQuery(api.cards.getCardById, { id: id as Id<'cards'> })
 const { mutate: sendPing } = useConvexAction(api.cardsnode.sendPing)
 
-onMounted(() => {
+watch(card, () => {
   sendPing({ message: 'tarot card played ' + card?.value?.title })
 })
 </script>
