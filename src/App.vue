@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { ref, onMounted } from 'vue'
+
+const logoSrc = ref('')
+
+onMounted(async () => {
+  const logoModules = import.meta.glob('@/assets/coverband*.webp')
+  const logoUrls = (await Promise.all(
+    Object.values(logoModules).map((importFn) => importFn())
+  )) as { default: string }[]
+  const randomIndex = Math.floor(Math.random() * logoUrls.length)
+  logoSrc.value = logoUrls[randomIndex].default
+})
 </script>
 
 <template>
   <header>
     <img
+      v-if="logoSrc"
       alt="Cover Band Logo"
       class="logo"
-      src="@/assets/coverband.webp"
+      :src="logoSrc"
       style="max-width: 95%; height: auto"
     />
 
