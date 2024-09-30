@@ -1,6 +1,55 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <div class="about-content">
+      <h1>Cover Band</h1>
+      <br />
+      <p>
+        Cover Band is the Pacific Northwest's premier cover band. Founded in 2024, their eclectic
+        mix of songs and styles are impossible to resist.
+      </p>
+
+      <div
+        class="band-members"
+        style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 20px"
+      >
+        <div class="band-member">
+          <img
+            src="@/assets/nat.jpg"
+            alt="Natalie"
+            class="member-photo"
+            style="
+              width: 200px;
+              height: 200px;
+              object-fit: cover;
+              border-radius: 10px;
+              border: 2px solid beige;
+            "
+          />
+          <div class="member-info">
+            <h3>Natalie</h3>
+            <p>Lead Vocals, Ukulele</p>
+          </div>
+        </div>
+        <div class="band-member">
+          <img
+            src="@/assets/seth.png"
+            alt="Seth"
+            class="member-photo"
+            style="
+              width: 200px;
+              height: 200px;
+              object-fit: cover;
+              border-radius: 10px;
+              border: 2px solid beige;
+            "
+          />
+          <div class="member-info">
+            <h3>Seth</h3>
+            <p>Guitar, Backing Vocals</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
