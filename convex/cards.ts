@@ -32,3 +32,19 @@ export const getCardById = query({
     return await ctx.db.get(id)
   }
 })
+
+export const getRandomCardForToday = query({
+  args: {},
+  handler: async (ctx) => {
+    const allCards = await ctx.db.query('cards').collect()
+    if (allCards.length === 0) {
+      return null
+    }
+
+    const today = new Date()
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+    const randomIndex = seed % allCards.length
+
+    return allCards[randomIndex]
+  }
+})

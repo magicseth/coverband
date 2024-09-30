@@ -4,6 +4,11 @@
     <textarea v-model="description" placeholder="Card Description"></textarea>
     <input v-model="youtubeId" placeholder="YouTube Video ID" />
     <button @click="createCard">Create Card</button>
+    <iframe
+      v-if="youtubeId"
+      :src="`https://www.youtube.com/embed/${youtubeId}`"
+      frameborder="0"
+    ></iframe>
   </div>
 </template>
 

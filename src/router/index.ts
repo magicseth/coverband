@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ManageCards from '../views/ManageCards.vue'
+import ViewCard from '../views/ViewCard.vue'
+import TodayCard from '../views/TodayCard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +30,18 @@ const router = createRouter({
       name: 'viewCard',
       component: () => import('../views/ViewCard.vue'),
       props: true
+    },
+
+    {
+      path: '/card/:id',
+      name: 'ViewCard',
+      component: ViewCard,
+      props: true
+    },
+    {
+      path: '/today',
+      name: 'TodayCard',
+      component: TodayCard
     }
   ]
 })
