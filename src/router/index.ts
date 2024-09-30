@@ -21,6 +21,12 @@ const router = createRouter({
       path: '/manageCards',
       name: 'manageCards',
       component: () => import('../views/ManageCards.vue')
+    },
+    {
+      path: '/viewCard/:id',
+      name: 'viewCard',
+      component: () => import('../views/ViewCard.vue'),
+      props: true
     }
   ]
 })

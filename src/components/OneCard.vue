@@ -10,6 +10,13 @@
         allowfullscreen
       ></iframe>
     </div>
+    <router-link
+      v-if="$route.name !== 'viewCard'"
+      :to="{ name: 'viewCard', params: { id: card._id } }"
+      class="view-card-link"
+    >
+      View Card Details
+    </router-link>
   </div>
 </template>
 
@@ -20,6 +27,7 @@ interface Card {
   title: string
   description: string
   youtubeId?: string
+  _id: string
 }
 
 const props = defineProps<{
@@ -29,7 +37,7 @@ const props = defineProps<{
 
 <style scoped>
 .one-card {
-  border: 1px solid #ddd;
+  border: 1px solid beige;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;

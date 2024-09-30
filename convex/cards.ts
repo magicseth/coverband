@@ -24,3 +24,11 @@ export const getCards = query({
     return await ctx.db.query('cards').collect()
   }
 })
+
+export const getCardById = query({
+  args: { id: v.id('cards') },
+  handler: async (ctx, args) => {
+    const { id } = args
+    return await ctx.db.get(id)
+  }
+})
