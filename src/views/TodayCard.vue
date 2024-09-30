@@ -11,7 +11,7 @@ const { mutate: setRandomCardForToday } = useConvexMutation(api.cards.setRandomC
 
 watch(todayCard, (newVal) => {
   if (newVal) {
-    router.replace({ name: 'ViewCard', params: { id: newVal._id } })
+    router.replace({ name: 'viewCard', params: { id: newVal._id } })
   } else {
     setRandomCardForToday({})
   }
@@ -19,6 +19,5 @@ watch(todayCard, (newVal) => {
 </script>
 
 <template>
-  <div v-if="!todayCard">Loading...</div>
-  Got it {{ todayCard }}
+  <div v-if="!todayCard">Consulting the tarot...</div>
 </template>

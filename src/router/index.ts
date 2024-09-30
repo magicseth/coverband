@@ -31,13 +31,6 @@ const router = createRouter({
       component: () => import('../views/ViewCard.vue'),
       props: true
     },
-
-    {
-      path: '/card/:id',
-      name: 'ViewCard',
-      component: ViewCard,
-      props: true
-    },
     {
       path: '/today',
       name: 'TodayCard',
