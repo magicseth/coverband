@@ -16,6 +16,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as cards from "../cards.js";
+import type * as cardsnode from "../cardsnode.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,6 +28,7 @@ import type * as cards from "../cards.js";
  */
 declare const fullApi: ApiFromModules<{
   cards: typeof cards;
+  cardsnode: typeof cardsnode;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

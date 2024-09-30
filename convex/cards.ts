@@ -1,5 +1,6 @@
 import { mutation, query } from './_generated/server'
 import { v } from 'convex/values'
+import { api } from './_generated/api'
 
 export const addCard = mutation({
   args: {
@@ -60,6 +61,11 @@ export const setRandomCardForToday = mutation({
     const selectedCard = allCards[randomIndex]
 
     await ctx.db.patch(selectedCard._id, { lastDayUsed: today })
+
+    // Schedule the action to send a text message
+    await ctx.scheduler.runAfter(0, api.cardsnode.sendTodayCardNotification, {
+      cardId: selectedCard._id
+    })
 
     return selectedCard._id
   }
