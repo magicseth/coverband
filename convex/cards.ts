@@ -32,19 +32,53 @@ export const getCardById = query({
     return await ctx.db.get(id)
   }
 })
-
-export const getRandomCardForToday = query({
+export const setRandomCardForToday = mutation({
   args: {},
   handler: async (ctx) => {
-    const allCards = await ctx.db.query('cards').collect()
+    const allCards = await ctx.db
+      .query('cards')
+      .withIndex('by_last_day_used', (q) => q.eq('lastDayUsed', undefined))
+      .collect()
     if (allCards.length === 0) {
       return null
     }
 
-    const today = new Date()
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+    const today = new Date().toISOString().split('T')[0]
+    const seed = parseInt(today.replace(/-/g, ''))
     const randomIndex = seed % allCards.length
+    const selectedCard = allCards[randomIndex]
 
-    return allCards[randomIndex]
+    await ctx.db.patch(selectedCard._id, { lastDayUsed: today })
+
+    return selectedCard._id
   }
 })
+
+export const getTodayCard = query({
+  args: {},
+  handler: async (ctx) => {
+    const today = new Date().toISOString().split('T')[0]
+    const todayCard = await ctx.db
+      .query('cards')
+      .withIndex('by_last_day_used', (q) => q.eq('lastDayUsed', today))
+      .first()
+
+    return todayCard
+  }
+})
+
+// export const getRandomCardForToday = query({
+//   args: {},
+//   handler: async (ctx) => {
+//     const allCards = await ctx.db.query('cards').collect()
+//     if (allCards.length === 0) {
+//       return null
+//     }
+
+//     const today = new Date()
+//     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+//     const randomIndex = seed % allCards.length
+
+//     return allCards[randomIndex]
+//   }
+// })

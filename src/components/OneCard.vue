@@ -2,6 +2,7 @@
   <div class="one-card">
     <h2>{{ card.title }}</h2>
     <p>{{ card.description }}</p>
+    <p v-if="card.lastDayUsed">Last used: {{ card.lastDayUsed }}</p>
     <div v-if="card.youtubeId" class="video-container">
       <iframe
         :src="'https://www.youtube.com/embed/' + card.youtubeId"
@@ -28,6 +29,7 @@ interface Card {
   description: string
   youtubeId?: string
   _id: string
+  lastDayUsed?: string
 }
 
 const props = defineProps<{

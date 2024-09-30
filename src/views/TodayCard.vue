@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import { onMounted, watch } from 'vue'
+import { watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../../convex/_generated/api'
-import { useConvexQuery } from '@convex-vue/core'
+import { useConvexQuery, useConvexMutation } from '@convex-vue/core'
 
 const router = useRouter()
-const { data: todayCard } = useConvexQuery(api.cards.getRandomCardForToday, {})
+const { data: todayCard } = useConvexQuery(api.cards.getTodayCard, {})
+
+const { mutate: setRandomCardForToday } = useConvexMutation(api.cards.setRandomCardForToday)
 
 watch(todayCard, (newVal) => {
   if (newVal) {
     router.replace({ name: 'ViewCard', params: { id: newVal._id } })
+  } else {
+    setRandomCardForToday({})
   }
 })
 </script>
