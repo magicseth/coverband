@@ -1,6 +1,12 @@
 import { mutation, query } from './_generated/server'
 import { v } from 'convex/values'
 import { api } from './_generated/api'
+import { DateTime } from 'luxon'
+
+// New reusable function to get the current date in Pacific Time
+function getDate() {
+  return DateTime.now().setZone('America/Los_Angeles').toFormat('yyyy-MM-dd')
+}
 
 export const addCard = mutation({
   args: {
@@ -33,10 +39,11 @@ export const getCardById = query({
     return await ctx.db.get(id)
   }
 })
+
 export const setRandomCardForToday = mutation({
   args: {},
   handler: async (ctx) => {
-    const today = new Date().toISOString().split('T')[0]
+    const today = getDate()
 
     // Check if a card has already been set for today
     const existingTodayCard = await ctx.db
@@ -74,7 +81,7 @@ export const setRandomCardForToday = mutation({
 export const getTodayCard = query({
   args: {},
   handler: async (ctx) => {
-    const today = new Date().toISOString().split('T')[0]
+    const today = getDate()
     const todayCard = await ctx.db
       .query('cards')
       .withIndex('by_last_day_used', (q) => q.eq('lastDayUsed', today))
@@ -84,18 +91,12 @@ export const getTodayCard = query({
   }
 })
 
-// export const getRandomCardForToday = query({
-//   args: {},
-//   handler: async (ctx) => {
-//     const allCards = await ctx.db.query('cards').collect()
-//     if (allCards.length === 0) {
-//       return null
-//     }
-
-//     const today = new Date()
-//     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
-//     const randomIndex = seed % allCards.length
-
-//     return allCards[randomIndex]
-//   }
-// })
+// Add this new mutation
+export const recycleCard = mutation({
+  args: { id: v.id('cards') },
+  handler: async (ctx, args) => {
+    const { id } = args
+    await ctx.db.patch(id, { lastDayUsed: undefined })
+    return id
+  }
+})

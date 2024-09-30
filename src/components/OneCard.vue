@@ -11,13 +11,7 @@
         allowfullscreen
       ></iframe>
     </div>
-    <router-link
-      v-if="$route.name !== 'viewCard'"
-      :to="{ name: 'viewCard', params: { id: card._id } }"
-      class="view-card-link"
-    >
-      View Card Details
-    </router-link>
+    <slot></slot>
   </div>
 </template>
 

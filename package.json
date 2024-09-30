@@ -16,6 +16,7 @@
     "@convex-vue/core": "^0.0.4",
     "@vueuse/core": "^11.1.0",
     "convex": "^1.16.3",
+    "luxon": "^3.5.0",
     "twilio": "^5.3.2",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20.16.10",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
