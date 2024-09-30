@@ -4,7 +4,12 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/coverband.webp" width="400" height="400" />
+    <img
+      alt="Cover Band Logo"
+      class="logo"
+      src="@/assets/coverband.webp"
+      style="max-width: 95%; height: auto"
+    />
 
     <div class="wrapper">
       <nav>
