@@ -5,7 +5,8 @@
       <br />
       <p>
         Cover Band is the Pacific Northwest's premier cover band. Founded in 2024, their eclectic
-        mix of songs and styles are impossible to resist.
+        mix of songs and styles are impossible to resist. Unironically they play originals as well
+        as covers.
       </p>
 
       <div
@@ -14,7 +15,7 @@
       >
         <div class="band-member">
           <img
-            src="@/assets/nat.jpg"
+            src="@/assets/nat.png"
             alt="Natalie"
             class="member-photo"
             style="
