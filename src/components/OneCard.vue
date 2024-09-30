@@ -2,7 +2,6 @@
   <div class="one-card">
     <h2>{{ card.title }}</h2>
     <p>{{ card.description }}</p>
-    <p v-if="card.lastDayUsed && $route.name !== 'viewCard'">Last used: {{ card.lastDayUsed }}</p>
     <div v-if="card.youtubeId" class="video-container">
       <iframe
         :src="'https://www.youtube.com/embed/' + card.youtubeId"
