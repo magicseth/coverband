@@ -35,6 +35,18 @@ export const getCardById = query({
 export const setRandomCardForToday = mutation({
   args: {},
   handler: async (ctx) => {
+    const today = new Date().toISOString().split('T')[0]
+
+    // Check if a card has already been set for today
+    const existingTodayCard = await ctx.db
+      .query('cards')
+      .withIndex('by_last_day_used', (q) => q.eq('lastDayUsed', today))
+      .first()
+
+    if (existingTodayCard) {
+      return existingTodayCard._id
+    }
+
     const allCards = await ctx.db
       .query('cards')
       .withIndex('by_last_day_used', (q) => q.eq('lastDayUsed', undefined))
@@ -43,7 +55,6 @@ export const setRandomCardForToday = mutation({
       return null
     }
 
-    const today = new Date().toISOString().split('T')[0]
     const seed = parseInt(today.replace(/-/g, ''))
     const randomIndex = seed % allCards.length
     const selectedCard = allCards[randomIndex]
