@@ -3,17 +3,22 @@
     <div v-if="!isEditing">
       <h2>{{ card.title }}</h2>
       <p>{{ card.description }}</p>
-      <p v-if="card.lastDayUsed">Last used: {{ card.lastDayUsed }}</p>
-      <iframe
-        v-if="card.youtubeId"
-        width="560"
-        height="315"
-        :src="`https://www.youtube.com/embed/${card.youtubeId}`"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+      <p v-if="editable && card.lastDayUsed">Last used: {{ card.lastDayUsed }}</p>
+      <div class="video-container">
+        <iframe
+          v-if="card.youtubeId"
+          width="100%"
+          height="315"
+          :src="`https://www.youtube.com/embed/${card.youtubeId}`"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
       <button v-if="editable" @click="startEditing">Edit</button>
+      <router-link v-if="editable" :to="{ name: 'viewCard', params: { id: card._id } }">
+        View Card
+      </router-link>
     </div>
     <div v-else>
       <input v-model="editedCard.title" placeholder="Title" />
@@ -25,6 +30,17 @@
       />
       <button @click="saveChanges">Save</button>
       <button @click="cancelEditing">Cancel</button>
+      <div class="video-container">
+        <iframe
+          v-if="editedCard.youtubeId"
+          width="100%"
+          height="315"
+          :src="`https://www.youtube.com/embed/${card.youtubeId}`"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   </div>
 </template>
