@@ -1,8 +1,7 @@
 <template>
   <div class="view-card">
     <h1>{{ card?.title }}</h1>
-    <OneCard v-if="card" :card="card" />
-    <p v-else>Card not found</p>
+    <OneCard :cardId="id" />
   </div>
 </template>
 
@@ -14,7 +13,7 @@ import { useRoute } from 'vue-router'
 import type { Id } from 'convex/_generated/dataModel'
 import { watch } from 'vue'
 
-const { id } = useRoute().params
+const { id } = useRoute().params as { id: Id<'cards'> }
 const { data: card } = useConvexQuery(api.cards.getCardById, { id: id as Id<'cards'> })
 const { mutate: sendPing } = useConvexAction(api.cardsnode.sendPing)
 

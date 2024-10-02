@@ -1,33 +1,29 @@
 <template>
-  <div class="one-card">
+  <div v-if="card" class="one-card">
     <h2>{{ card.title }}</h2>
     <p>{{ card.description }}</p>
-    <div v-if="card.youtubeId" class="video-container">
-      <iframe
-        :src="'https://www.youtube.com/embed/' + card.youtubeId"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <slot></slot>
+    <iframe
+      v-if="card.youtubeId"
+      width="560"
+      height="315"
+      :src="`https://www.youtube.com/embed/${card.youtubeId}`"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
-interface Card {
-  title: string
-  description: string
-  youtubeId?: string
-  _id: string
-  lastDayUsed?: string
-}
+import { useConvexQuery } from '@convex-vue/core'
+import { api } from '../../convex/_generated/api'
+import type { Id } from 'convex/_generated/dataModel'
 
 const props = defineProps<{
-  card: Card
+  cardId: Id<'cards'>
 }>()
+
+const { data: card } = useConvexQuery(api.cards.getCardById, { id: props.cardId })
 </script>
 
 <style scoped>
