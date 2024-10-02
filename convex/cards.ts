@@ -107,11 +107,17 @@ export const updateCard = mutation({
     id: v.id('cards'),
     title: v.string(),
     description: v.string(),
-    youtubeId: v.string()
+    youtubeId: v.string(),
+    lastDayUsed: v.optional(v.union(v.string(), v.null()))
   },
   handler: async (ctx, args) => {
-    const { id, title, description, youtubeId } = args
-    await ctx.db.patch(id, { title, description, youtubeId })
+    const { id, title, description, youtubeId, lastDayUsed } = args
+    await ctx.db.patch(id, {
+      title,
+      description,
+      youtubeId,
+      lastDayUsed: lastDayUsed === '' || lastDayUsed === null ? undefined : lastDayUsed
+    })
     return id
   }
 })

@@ -3,6 +3,7 @@
     <div v-if="!isEditing">
       <h2>{{ card.title }}</h2>
       <p>{{ card.description }}</p>
+      <p v-if="card.lastDayUsed">Last used: {{ card.lastDayUsed }}</p>
       <iframe
         v-if="card.youtubeId"
         width="560"
@@ -18,6 +19,10 @@
       <input v-model="editedCard.title" placeholder="Title" />
       <textarea v-model="editedCard.description" placeholder="Description"></textarea>
       <input v-model="editedCard.youtubeId" placeholder="YouTube ID" />
+      <input
+        v-model="editedCard.lastDayUsed"
+        placeholder="Last Day Used (YYYY-MM-DD or leave empty to reset)"
+      />
       <button @click="saveChanges">Save</button>
       <button @click="cancelEditing">Cancel</button>
     </div>
@@ -42,7 +47,8 @@ const isEditing = ref(false)
 const editedCard = reactive({
   title: '',
   description: '',
-  youtubeId: ''
+  youtubeId: '',
+  lastDayUsed: ''
 })
 
 function startEditing() {
@@ -50,6 +56,7 @@ function startEditing() {
     editedCard.title = card.value.title
     editedCard.description = card.value.description
     editedCard.youtubeId = card.value.youtubeId
+    editedCard.lastDayUsed = card.value.lastDayUsed || ''
     isEditing.value = true
   }
 }
@@ -64,7 +71,8 @@ async function saveChanges() {
       id: card.value._id,
       title: editedCard.title,
       description: editedCard.description,
-      youtubeId: editedCard.youtubeId
+      youtubeId: editedCard.youtubeId,
+      lastDayUsed: editedCard.lastDayUsed
     })
     isEditing.value = false
   }
