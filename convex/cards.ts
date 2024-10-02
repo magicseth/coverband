@@ -100,3 +100,18 @@ export const recycleCard = mutation({
     return id
   }
 })
+
+// Add this new mutation
+export const updateCard = mutation({
+  args: {
+    id: v.id('cards'),
+    title: v.string(),
+    description: v.string(),
+    youtubeId: v.string()
+  },
+  handler: async (ctx, args) => {
+    const { id, title, description, youtubeId } = args
+    await ctx.db.patch(id, { title, description, youtubeId })
+    return id
+  }
+})

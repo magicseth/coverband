@@ -3,7 +3,7 @@
     <h1>All Cards</h1>
     <div v-if="cards?.length === 0">No cards available.</div>
     <div v-for="card in cards" :key="card._id">
-      <OneCard :cardId="card._id" />
+      <OneCard :cardId="card._id" :editable="true" />
     </div>
   </div>
 </template>
