@@ -5,7 +5,12 @@ import { DateTime } from 'luxon'
 
 // New reusable function to get the current date in Pacific Time
 function getDate() {
-  return DateTime.now().setZone('America/Los_Angeles').toFormat('yyyy-MM-dd')
+  const now = DateTime.now().setZone('America/Los_Angeles')
+  const hour = now.hour
+  if (hour >= 23.5 || hour < 4) {
+    return 'midnight'
+  }
+  return now.toFormat('yyyy-MM-dd')
 }
 
 export const addCard = mutation({

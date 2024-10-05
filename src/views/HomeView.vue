@@ -7,8 +7,8 @@
       <ul class="event-list">
         <li class="event-item">
           <div class="event-details">
-            <span class="event-date">October 6, 2024</span>
-            <span class="event-venue">Laurelthirst Brewing, Portland</span>
+            <span class="event-date">Today</span>
+            <span class="event-venue">Playing in your mind.</span>
           </div>
         </li>
       </ul>
