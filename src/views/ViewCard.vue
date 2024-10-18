@@ -78,10 +78,12 @@ onMounted(() => {
   codename.value = storedCodename
 })
 
-watch(card, () => {
-  sendPing({
-    message: codename.value + ' played ' + card?.value?.title + ' url ' + window.location.href
-  })
+watch(card, (newCard, oldCard) => {
+  if (!oldCard?._id && newCard?._id) {
+    sendPing({
+      message: codename.value + ' played ' + newCard?.title + ' url ' + window.location.href
+    })
+  }
 })
 </script>
 
