@@ -7,12 +7,15 @@
       <div class="video-container">
         <iframe
           v-if="card.youtubeId"
+          ref="youtubePlayer"
           width="100%"
           height="315"
-          :src="`https://www.youtube.com/embed/${card.youtubeId}`"
+          :src="`https://www.youtube.com/embed/${card.youtubeId}?enablejsapi=1`"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
+          :id="`youtube-player-${card.youtubeId}`"
+          @load="setupYouTubeAPI"
         ></iframe>
       </div>
       <button v-if="editable" @click="startEditing">Edit</button>
@@ -46,10 +49,14 @@
 </template>
 
 <script setup lang="ts">
-import { useConvexQuery, useConvexMutation } from '@convex-vue/core'
+import { useConvexQuery, useConvexMutation, useConvexAction } from '@convex-vue/core'
 import { api } from '../../convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { usePing } from '@/usePing'
+
+// Add this type declaration at the top of your file
+declare const YT: any
 
 const props = defineProps<{
   cardId: Id<'cards'>
@@ -58,6 +65,7 @@ const props = defineProps<{
 
 const { data: card } = useConvexQuery(api.cards.getCardById, { id: props.cardId })
 const updateCard = useConvexMutation(api.cards.updateCard)
+const { sendPing } = usePing()
 
 const isEditing = ref(false)
 const editedCard = reactive({
@@ -66,6 +74,8 @@ const editedCard = reactive({
   youtubeId: '',
   lastDayUsed: ''
 })
+
+let player: any = null
 
 function startEditing() {
   if (card.value) {
@@ -93,6 +103,50 @@ async function saveChanges() {
     isEditing.value = false
   }
 }
+
+function setupYouTubeAPI(event: Event) {
+  console.log('setupYouTubeAPI')
+  if (typeof YT === 'undefined' || !YT.Player) {
+    console.log('YT is undefined')
+    // Load the YouTube API script if it's not already loaded
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+    ;(window as any).onYouTubeIframeAPIReady = onYouTubeIframeAPIReady
+  } else {
+    console.log('YT is not undefined')
+    onYouTubeIframeAPIReady(event.target as HTMLIFrameElement)
+  }
+}
+
+function onYouTubeIframeAPIReady(element: HTMLIFrameElement) {
+  console.log('onYouTubeIframeAPIReady')
+  player = new YT.Player(`youtube-player-${card.value?.youtubeId}`, {
+    events: {
+      onStateChange: onPlayerStateChange
+    }
+  })
+}
+
+function onPlayerStateChange(event: any) {
+  console.log('onPlayerStateChange')
+  if (event.data == YT.PlayerState.PLAYING) {
+    sendPing('youtube started ' + card.value?.title)
+    console.log('youtube started')
+  }
+}
+
+const youtubePlayer = ref<HTMLDivElement | null>(null)
+onMounted(() => {
+  // setupYouTubeAPI(youtubePlayer.value as HTMLDivElement)
+})
+
+onUnmounted(() => {
+  if (player) {
+    player.destroy()
+  }
+})
 </script>
 
 <style scoped>
