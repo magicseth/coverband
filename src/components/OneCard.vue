@@ -5,8 +5,15 @@
       <p>{{ card.description }}</p>
       <p v-if="editable && card.lastDayUsed">Last used: {{ card.lastDayUsed }}</p>
       <div class="video-container">
+        <img
+          v-if="editable && card.youtubeId && !showIframe"
+          :src="`https://img.youtube.com/vi/${card.youtubeId}/0.jpg`"
+          :alt="card.title"
+          class="youtube-thumbnail"
+          @click="showIframe = true"
+        />
         <iframe
-          v-if="card.youtubeId"
+          v-else-if="card.youtubeId"
           ref="youtubePlayer"
           width="100%"
           height="315"
@@ -34,15 +41,12 @@
       <button @click="saveChanges">Save</button>
       <button @click="cancelEditing">Cancel</button>
       <div class="video-container">
-        <iframe
+        <img
           v-if="editedCard.youtubeId"
-          width="100%"
-          height="315"
-          :src="`https://www.youtube.com/embed/${card.youtubeId}`"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+          :src="`https://img.youtube.com/vi/${editedCard.youtubeId}/0.jpg`"
+          :alt="editedCard.title"
+          class="youtube-thumbnail"
+        />
       </div>
     </div>
   </div>
@@ -68,6 +72,7 @@ const updateCard = useConvexMutation(api.cards.updateCard)
 const { sendPing } = usePing()
 
 const isEditing = ref(false)
+const showIframe = ref(false)
 const editedCard = reactive({
   title: '',
   description: '',
@@ -192,5 +197,13 @@ textarea {
 
 button {
   margin-right: 10px;
+}
+
+.youtube-thumbnail {
+  width: 100%;
+  height: auto;
+  max-height: 315px;
+  object-fit: cover;
+  cursor: pointer;
 }
 </style>
