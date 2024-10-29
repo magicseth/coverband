@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ManageCards from '../views/ManageCards.vue'
 import ViewCard from '../views/ViewCard.vue'
 import TodayCard from '../views/TodayCard.vue'
+import SetList from '@/views/SetList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,8 +39,8 @@ const router = createRouter({
     },
     {
       path: '/backcover',
-      name: 'BackCover',
-      component: TodayCard
+      name: 'SetList',
+      component: SetList
     }
   ]
 })
