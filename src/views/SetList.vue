@@ -70,7 +70,7 @@ onMounted(async () => {
         class="flex flex-col"
         :class="song.author"
       >
-        {{ decodeURIComponent(song.url.split('/').pop()?.split('.')[0].replace(/%20/g, ' '))
+        {{ decodeURIComponent(song.url.split('/').pop()?.split('.')[0].replace(/%20/g, ' ') || '')
         }}<br />
         <audio :src="song.url" controls />
       </div>
