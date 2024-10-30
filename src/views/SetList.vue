@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
+import { usePing } from '@/usePing'
+
+const { sendPing } = usePing()
+sendPing(' loaded backCover')
+  
 
 const songsWithAttributionAndDate = ref<
   { url: string; lastModified: string | null; author: string }[]
