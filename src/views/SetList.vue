@@ -117,7 +117,7 @@ const decodeURL = (url: string) => {
   color: white; /* text-white */
   border-bottom-right-radius: 0.25rem !important;
   align-self: flex-end;
-  text-align: right;
+  text-align: left;
   width: fit-content;
   max-width: 80%;
 }
