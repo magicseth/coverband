@@ -36,7 +36,6 @@ onMounted(async () => {
       const response = await fetch(url as string, { method: 'HEAD' })
       // const lastModified = response.headers.get('last-modified')
       // extract the date from the filename
-      console.log(path.split('/').pop()?.split('_')[0])
       const lastModified = path.split('/').pop()?.split('_')[0] || ''
       return {
         url: url as string,
@@ -71,15 +70,18 @@ const decodeURL = (url: string) => {
   const nameWithPrefix = decodeURIComponent(
     url.split('/').pop()?.split('.')[0].replace(/%20/g, ' ') || ''
   )
+  console.log(nameWithPrefix)
+  const positionOfLastDash = nameWithPrefix.lastIndexOf('-')
+  const nameWithoutRandomString =
+    positionOfLastDash == -1 ? nameWithPrefix : nameWithPrefix.substring(0, positionOfLastDash)
+  console.log(nameWithoutRandomString)
   // get Rid of everything before _
-  const name = nameWithPrefix.split('_')[1].replace(/-/g, ' ')
+  const name = nameWithoutRandomString.split('_')[1].replace(/-/g, ' ')
   // our bundler adds a random string to the end of the:
   ///assets/20240612035559_Hey-you-weary-hobo%E2%80%A6-D981JBzf.m4a
   // so we need to get rid of everything after the last -
-  const positionOfLastDash = name.lastIndexOf('-')
-  const nameWithoutRandomString = name.substring(0, positionOfLastDash)
 
-  return nameWithoutRandomString
+  return name
 }
 </script>
 
