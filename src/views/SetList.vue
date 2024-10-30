@@ -90,7 +90,6 @@ const decodeURL = (url: string) => {
       >
         {{ decodeURL(song.url) }}<br />
         <audio preload="none" :src="song.url" controls @play="handlePlay" />
-        {{ song.lastModified }}
       </div>
     </div>
   </div>
