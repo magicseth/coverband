@@ -89,7 +89,8 @@ const decodeURL = (url: string) => {
         :class="song.author"
       >
         {{ decodeURL(song.url) }}<br />
-        <audio :src="song.url" controls @play="handlePlay" /> {{ song.lastModified }}
+        <audio preload="none" :src="song.url" controls @play="handlePlay" />
+        {{ song.lastModified }}
       </div>
     </div>
   </div>
