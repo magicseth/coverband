@@ -73,8 +73,13 @@ const decodeURL = (url: string) => {
   )
   // get Rid of everything before _
   const name = nameWithPrefix.split('_')[1].replace(/-/g, ' ')
+  // our bundler adds a random string to the end of the:
+  ///assets/20240612035559_Hey-you-weary-hobo%E2%80%A6-D981JBzf.m4a
+  // so we need to get rid of everything after the last -
+  const positionOfLastDash = name.lastIndexOf('-')
+  const nameWithoutRandomString = name.substring(0, positionOfLastDash)
 
-  return name
+  return nameWithoutRandomString
 }
 </script>
 
