@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 
 const songsWithAttributionAndDate = ref<
-  { url: string; lastModified: Date | null; author: string }[]
+  { url: string; lastModified: string | null; author: string }[]
 >([])
 onMounted(async () => {
   const fromNatSongs = import.meta.glob('@/assets/songs/fromNat/*.m4a', {
@@ -13,20 +13,14 @@ onMounted(async () => {
   const fromNatFileStats = await Promise.all(
     Object.entries(fromNatSongs).map(async ([path, url]) => {
       const response = await fetch(url as string, { method: 'HEAD' })
-      const lastModified = response.headers.get('last-modified')
+      const lastModified = path.split('/').pop()?.split('_')[0] || ''
       return {
         url: url as string,
-        lastModified: lastModified ? new Date(lastModified) : null,
+        lastModified: lastModified,
         author: 'Nat'
       }
     })
   )
-
-  // Sort by modified date descending
-  fromNatFileStats.sort((a, b) => {
-    if (!a.lastModified || !b.lastModified) return 0
-    return b.lastModified.getTime() - a.lastModified.getTime()
-  })
 
   const fromSethSongs = import.meta.glob('@/assets/songs/fromSeth/*.m4a', {
     as: 'url',
@@ -37,10 +31,13 @@ onMounted(async () => {
   const fromSethFileStats = await Promise.all(
     Object.entries(fromSethSongs).map(async ([path, url]) => {
       const response = await fetch(url as string, { method: 'HEAD' })
-      const lastModified = response.headers.get('last-modified')
+      // const lastModified = response.headers.get('last-modified')
+      // extract the date from the filename
+      console.log(path.split('/').pop()?.split('_')[0])
+      const lastModified = path.split('/').pop()?.split('_')[0] || ''
       return {
         url: url as string,
-        lastModified: lastModified ? new Date(lastModified) : null,
+        lastModified: lastModified,
         author: 'Seth'
       }
     })
@@ -49,7 +46,7 @@ onMounted(async () => {
   const allFileStats = [...fromNatFileStats, ...fromSethFileStats]
   allFileStats.sort((a, b) => {
     if (!a.lastModified || !b.lastModified) return 0
-    return b.lastModified.getTime() - a.lastModified.getTime()
+    return b.lastModified > a.lastModified ? -1 : 1
   })
 
   songsWithAttributionAndDate.value = allFileStats.map((stat) => ({
@@ -58,6 +55,16 @@ onMounted(async () => {
     author: stat.author
   }))
 })
+
+const decodeURL = (url: string) => {
+  const nameWithPrefix = decodeURIComponent(
+    url.split('/').pop()?.split('.')[0].replace(/%20/g, ' ') || ''
+  )
+  // get Rid of everything before _
+  const name = nameWithPrefix.split('_')[1].replace(/-/g, ' ')
+
+  return name
+}
 </script>
 
 <template>
@@ -70,9 +77,8 @@ onMounted(async () => {
         class="flex flex-col"
         :class="song.author"
       >
-        {{ decodeURIComponent(song.url.split('/').pop()?.split('.')[0].replace(/%20/g, ' ') || '')
-        }}<br />
-        <audio :src="song.url" controls />
+        {{ decodeURL(song.url) }}<br />
+        <audio :src="song.url" controls /> {{ song.lastModified }}
       </div>
     </div>
   </div>
