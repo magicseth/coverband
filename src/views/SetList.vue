@@ -4,6 +4,9 @@ import { onMounted, ref, watch } from 'vue'
 const songsWithAttributionAndDate = ref<
   { url: string; lastModified: string | null; author: string }[]
 >([])
+
+const currentlyPlaying = ref<HTMLAudioElement | null>(null)
+
 onMounted(async () => {
   const fromNatSongs = import.meta.glob('@/assets/songs/fromNat/*.m4a', {
     as: 'url',
@@ -56,6 +59,14 @@ onMounted(async () => {
   }))
 })
 
+const handlePlay = (event: Event) => {
+  const audioElement = event.target as HTMLAudioElement
+  if (currentlyPlaying.value && currentlyPlaying.value !== audioElement) {
+    currentlyPlaying.value.pause()
+  }
+  currentlyPlaying.value = audioElement
+}
+
 const decodeURL = (url: string) => {
   const nameWithPrefix = decodeURIComponent(
     url.split('/').pop()?.split('.')[0].replace(/%20/g, ' ') || ''
@@ -78,7 +89,7 @@ const decodeURL = (url: string) => {
         :class="song.author"
       >
         {{ decodeURL(song.url) }}<br />
-        <audio :src="song.url" controls /> {{ song.lastModified }}
+        <audio :src="song.url" controls @play="handlePlay" /> {{ song.lastModified }}
       </div>
     </div>
   </div>
