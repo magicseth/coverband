@@ -69,6 +69,7 @@ const handlePlay = (event: Event) => {
     currentlyPlaying.value.pause()
   }
   currentlyPlaying.value = audioElement
+  sendPing(' backCover playing ' + currentlyPlaying.value.src)
 }
 
 const decodeURL = (url: string) => {
