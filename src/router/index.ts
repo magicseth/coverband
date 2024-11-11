@@ -41,6 +41,11 @@ const router = createRouter({
       path: '/backcover',
       name: 'SetList',
       component: SetList
+    },
+    {
+      path: '/traveltarotmushroom',
+      name: 'TravelTarotMushroom',
+      component: TodayCard
     }
   ]
 })
